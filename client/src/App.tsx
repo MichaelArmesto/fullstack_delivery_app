@@ -1,6 +1,6 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import { Main, Login } from "./containers/index.ts";
+import { Main, Login } from "./containers/index";
 
 
 export const App: React.FC = () => {
