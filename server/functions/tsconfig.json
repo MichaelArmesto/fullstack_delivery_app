@@ -12,9 +12,7 @@
     "skipLibCheck": true
   },
   "compileOnSave": true,
-  "include": ["src",
-"src/routes",
-"typings.d.ts",]
+  "include": ["src", "typings.d.ts"]
 }
 
 

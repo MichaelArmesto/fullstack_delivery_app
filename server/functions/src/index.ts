@@ -6,7 +6,7 @@ import {Request, Response, NextFunction} from "express";
 import userRoutes from "./routes/user";
 import {config} from "dotenv";
 
-const serviceAccountKey = require("../serviceAccountKey.json");
+import serviceAccountKey from "../serviceAccountKey.json";
 
 config();
 
@@ -26,8 +26,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // firebase credentials
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
-  });
+  credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
+});
 
 // API endpoints
 app.get("/", (req: Request, res: Response) => {
