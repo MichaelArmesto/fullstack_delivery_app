@@ -5,7 +5,7 @@ import { FaEnvelope, FaLock, FcGoogle } from "../assets/icons/index";
 import { motion } from "framer-motion";
 import { buttonClick } from '../Animations';
 
-import { getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword} from 'firebase/auth';
 import { app } from '../config/firebase.config';
 import { validateUserJwt } from '../api/index';
 
@@ -40,6 +40,36 @@ const Login: React.FC = () => {
     });
     });
   };
+
+  const signUpWithEmailPassword = async () => {
+    if((userEmail === '' || userPassword === '' || confirm_password === '')){
+      console.log('Empty Fields')
+    }else{
+      if(userPassword === confirm_password){
+          await createUserWithEmailAndPassword(firebaseAuth, userEmail, userPassword).then(userCred => {
+            firebaseAuth.onAuthStateChanged(async (cred) => {
+              if (cred) {
+                  const token = await cred.getIdToken();
+                  console.log('Obtained token:', token);  
+                  if (typeof token === 'string' && token.trim() !== '') {
+                      validateUserJwt(token).then((data) => {
+                          console.log('Validation data:', data.decodedValue);  
+                      }).catch((validationError) => {
+                          console.error('Validation error:', validationError);  
+                      });
+                  } else {
+                      console.error('Invalid token:', token); 
+                  }
+              } else {
+                  console.error('No credentials found.');
+              }
+          });
+          })
+      }else{
+
+      }
+    }
+  }
 
   return (
     <div className='w-screen h-screen relative overflow-hidden flex'>
@@ -96,7 +126,8 @@ const Login: React.FC = () => {
             }
 
             {isSignUp ? 
-              <motion.button {...buttonClick} className='w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'>
+              <motion.button {...buttonClick} className='w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'
+              onClick={signUpWithEmailPassword}>
               Sign Up
             </motion.button>
             :
