@@ -7,7 +7,7 @@ import { buttonClick } from '../Animations';
 
 import { getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import { app } from '../config/firebase.config';
-import { validateUserJwt } from '../api';
+import { validateUserJwt } from '../api/index';
 
 const Login: React.FC = () => {
 
@@ -21,15 +21,23 @@ const Login: React.FC = () => {
 
   const logInWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, provider).then(userCred => {
-      firebaseAuth.onAuthStateChanged( cred => {
-        if( cred ){
-          cred.getIdToken().then((token) => {
-            validateUserJwt(token).then((data) => {
-              console.log(data);
-            });
-          });
-        };
-      });
+      firebaseAuth.onAuthStateChanged(async (cred) => {
+        if (cred) {
+            const token = await cred.getIdToken();
+            console.log('Obtained token:', token);  
+            if (typeof token === 'string' && token.trim() !== '') {
+                validateUserJwt(token).then((data) => {
+                    console.log('Validation data:', data.decodedValue);  
+                }).catch((validationError) => {
+                    console.error('Validation error:', validationError);  
+                });
+            } else {
+                console.error('Invalid token:', token); 
+            }
+        } else {
+            console.error('No credentials found.');
+        }
+    });
     });
   };
 
