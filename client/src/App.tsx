@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "./context/actions/userActions";
 import { UserActionTypes } from "./context/reducers/types";
 import { Dispatch } from "redux";
+import { motion } from "framer-motion";
+import { fadeInOut } from "./Animations";
 
 
 
@@ -47,6 +49,11 @@ export const App: React.FC = () => {
     
     return (
         <div className="w-screen min-h-screen h-auto flex flex-col items-center justify-center">
+            {isLoading && (
+                <motion.div {...fadeInOut} className="fixed z-50 inset-0 bg-lightOverlay backdrop-blur-md flex items-center justify-center w-full">
+                    Loading...
+                </motion.div>
+            )}
             <Routes>
                 <Route path="/*" element={<Main />}/>
                 <Route path="/Login" element={<Login />}/>

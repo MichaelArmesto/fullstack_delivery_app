@@ -3,11 +3,12 @@ import { User, UserActionTypes } from './types';
 interface UserState {
     user: User | null;
 }
-
+export interface RootState {
+    user: UserState;
+}
 const initialState: UserState = {
     user: null,
 };
-
 const userReducer = (state = initialState, action: UserActionTypes): UserState => {
     switch (action.type) {
         case 'SET_USER':

@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { LoginBg, Logo } from '../assets';
 import { LoginInput } from '../components';
 import { FaEnvelope, FaLock, FcGoogle } from "../assets/icons/index";
 import { motion } from "framer-motion";
 import { buttonClick } from '../Animations';
 
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, User} from 'firebase/auth';
 import { app } from '../config/firebase.config';
 import { validateUserJwt } from '../api/index';
 import { useNavigate } from 'react-router-dom';
+import { UserActionTypes } from '../context/reducers/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from "redux";
+import { setUserDetails } from '../context/actions/userActions';
+import { RootState } from '../context/reducers/userReducer';
 
 const Login: React.FC = () => {
 
@@ -21,6 +26,18 @@ const Login: React.FC = () => {
   const provider = new GoogleAuthProvider();
 
   const navigate = useNavigate();
+  const dispatch: Dispatch<UserActionTypes> = useDispatch();
+
+  // if an user object is existen then do not allow user to see the login page
+
+  const user = useSelector((state: RootState) => state.user)
+
+
+  useEffect(() => {
+    if(user){
+      navigate('/', {replace: true});
+    }
+  }, [])
 
   const logInWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, provider).then(userCred => {
@@ -30,7 +47,8 @@ const Login: React.FC = () => {
             console.log('Obtained token:', token);  
             if (typeof token === 'string' && token.trim() !== '') {
                 validateUserJwt(token).then((data) => {
-                    console.log('Validation data:', data.decodedValue);  
+                    console.log('Validation data:', data.decodedValue);
+                    dispatch(setUserDetails(data.decodedValue)) 
                 }).catch((validationError) => {
                     console.error('Validation error:', validationError);  
                 });
@@ -60,7 +78,8 @@ const Login: React.FC = () => {
                   console.log('Obtained token:', token);  
                   if (typeof token === 'string' && token.trim() !== '') {
                       validateUserJwt(token).then((data) => {
-                          console.log('Validation data:', data.decodedValue);  
+                          console.log('Validation data:', data.decodedValue);
+                          dispatch(setUserDetails(data.decodedValue))  
                       }).catch((validationError) => {
                           console.error('Validation error:', validationError);  
                       });
@@ -88,7 +107,8 @@ const Login: React.FC = () => {
                 console.log('Obtained token:', token);  
                 if (typeof token === 'string' && token.trim() !== '') {
                     validateUserJwt(token).then((data) => {
-                        console.log('Validation data:', data.decodedValue);  
+                        console.log('Validation data:', data.decodedValue);
+                        dispatch(setUserDetails(data.decodedValue)) 
                     }).catch((validationError) => {
                         console.error('Validation error:', validationError);  
                     });
