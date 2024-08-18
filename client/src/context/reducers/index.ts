@@ -7,4 +7,6 @@ const myReducers = combineReducers({
     alert: alertReducer
 })
 
+export type RootState = ReturnType<typeof myReducers>;
+
 export default myReducers;

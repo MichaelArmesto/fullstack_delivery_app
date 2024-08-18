@@ -4,7 +4,7 @@ import { Main, Login } from "./containers/index";
 import { getAuth, User } from "firebase/auth";
 import { app } from "./config/firebase.config";
 import { validateUserJwt } from "./api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./context/actions/userActions";
 import { UserActionTypes } from "./context/reducers/userTypes";
 import { Dispatch } from "redux";
@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { fadeInOut } from "./Animations";
 import { MainLoader } from "./components";
 import Alert from "./components/Alert";
+import myReducers from './context/reducers/index'
 
 
 
@@ -19,6 +20,7 @@ export const App: React.FC = () => {
 
     const firebaseAuth = getAuth(app);
     const [isLoading, setIsLoading] = useState(false)
+    const alert = useSelector((state: ReturnType<typeof myReducers>) => state.alert)
 
     const dispatch: Dispatch<UserActionTypes> = useDispatch();
 
@@ -61,7 +63,7 @@ export const App: React.FC = () => {
                 <Route path="/Login" element={<Login />}/>
             </Routes>
 
-            <Alert type={"SUCCESSS"} message={"This is an alert"}/>
+            {alert.alert?.type && (<Alert type={alert.alert?.type} message={alert.alert.message}/>)}
         </div>
     );
 };

@@ -12,7 +12,7 @@ export const setAlertSuccess = (alert: Alert): alertSuccess => {
     }
 }
 
-export const setAlertIinfo = (alert: Alert): alertInfo => {
+export const setAlertInfo = (alert: Alert): alertInfo => {
     return{
         type: SET_INFO,
         alert: alert
