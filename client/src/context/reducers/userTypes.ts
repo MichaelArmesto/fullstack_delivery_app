@@ -14,3 +14,4 @@ export interface GetUserAction {
 }
 
 export type UserActionTypes = SetUserAction | GetUserAction;
+

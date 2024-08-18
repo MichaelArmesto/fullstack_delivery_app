@@ -9,7 +9,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPas
 import { app } from '../config/firebase.config';
 import { validateUserJwt } from '../api/index';
 import { useNavigate } from 'react-router-dom';
-import { UserActionTypes } from '../context/reducers/types';
+import { UserActionTypes } from '../context/reducers/userTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from "redux";
 import { setUserDetails } from '../context/actions/userActions';

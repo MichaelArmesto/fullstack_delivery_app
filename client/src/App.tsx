@@ -6,11 +6,12 @@ import { app } from "./config/firebase.config";
 import { validateUserJwt } from "./api";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "./context/actions/userActions";
-import { UserActionTypes } from "./context/reducers/types";
+import { UserActionTypes } from "./context/reducers/userTypes";
 import { Dispatch } from "redux";
 import { motion } from "framer-motion";
 import { fadeInOut } from "./Animations";
 import { MainLoader } from "./components";
+import Alert from "./components/Alert";
 
 
 
@@ -59,6 +60,8 @@ export const App: React.FC = () => {
                 <Route path="/*" element={<Main />}/>
                 <Route path="/Login" element={<Login />}/>
             </Routes>
+
+            <Alert type={"SUCCESSS"} message={"This is an alert"}/>
         </div>
     );
 };

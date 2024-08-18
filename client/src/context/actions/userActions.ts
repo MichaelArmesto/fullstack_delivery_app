@@ -1,4 +1,4 @@
-import { User, SetUserAction, GetUserAction } from '../reducers/types';
+import { User, SetUserAction, GetUserAction } from '../reducers/userTypes';
 
 export const SET_USER: 'SET_USER' = 'SET_USER';
 export const GET_USER = 'GET_USER';
