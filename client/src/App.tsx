@@ -10,6 +10,7 @@ import { UserActionTypes } from "./context/reducers/types";
 import { Dispatch } from "redux";
 import { motion } from "framer-motion";
 import { fadeInOut } from "./Animations";
+import { MainLoader } from "./components";
 
 
 
@@ -51,7 +52,7 @@ export const App: React.FC = () => {
         <div className="w-screen min-h-screen h-auto flex flex-col items-center justify-center">
             {isLoading && (
                 <motion.div {...fadeInOut} className="fixed z-50 inset-0 bg-lightOverlay backdrop-blur-md flex items-center justify-center w-full">
-                    Loading...
+                    <MainLoader />
                 </motion.div>
             )}
             <Routes>
