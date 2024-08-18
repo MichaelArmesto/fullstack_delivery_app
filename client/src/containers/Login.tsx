@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from "redux";
 import { setUserDetails } from '../context/actions/userActions';
 import { RootState } from '../context/reducers/userReducer';
+import myReducers from '../context/reducers';
+import { setAlertInfo, setAlertWarning } from '../context/actions/alertActions';
+import { Alert, AlertTypes } from '../context/reducers/alertTypes';
 
 const Login: React.FC = () => {
 
@@ -26,11 +29,13 @@ const Login: React.FC = () => {
   const provider = new GoogleAuthProvider();
 
   const navigate = useNavigate();
-  const dispatch: Dispatch<UserActionTypes> = useDispatch();
+  const dispatchUser: Dispatch<UserActionTypes> = useDispatch();
+  const dispatchAlert = useDispatch<Dispatch<AlertTypes>>();
 
   // if an user object is existen then do not allow user to see the login page
 
   const user = useSelector((state: RootState) => state.user)
+  const alert = useSelector((state: ReturnType<typeof myReducers>) => state.alert.alert)
 
 
   useEffect(() => {
@@ -48,7 +53,7 @@ const Login: React.FC = () => {
             if (typeof token === 'string' && token.trim() !== '') {
                 validateUserJwt(token).then((data) => {
                     console.log('Validation data:', data.decodedValue);
-                    dispatch(setUserDetails(data.decodedValue)) 
+                    dispatchUser(setUserDetails(data.decodedValue)) 
                 }).catch((validationError) => {
                     console.error('Validation error:', validationError);  
                 });
@@ -65,7 +70,8 @@ const Login: React.FC = () => {
 
   const signUpWithEmailPassword = async () => {
     if((userEmail === '' || userPassword === '' || confirm_password === '')){
-      console.log('Empty Fields')
+      const alert: Alert = { type: 'INFO', message: 'Fields must not be empty' };
+      dispatchAlert(setAlertInfo(alert));
     }else{
       if(userPassword === confirm_password){
         setUserEmail('');
@@ -79,7 +85,7 @@ const Login: React.FC = () => {
                   if (typeof token === 'string' && token.trim() !== '') {
                       validateUserJwt(token).then((data) => {
                           console.log('Validation data:', data.decodedValue);
-                          dispatch(setUserDetails(data.decodedValue))  
+                          dispatchUser(setUserDetails(data.decodedValue))  
                       }).catch((validationError) => {
                           console.error('Validation error:', validationError);  
                       });
@@ -88,7 +94,8 @@ const Login: React.FC = () => {
                       console.error('Invalid token:', token); 
                   }
               } else {
-                  console.error('No credentials found.');
+                const alert: Alert = { type: 'WARNING', message: 'Password does not match' };
+                dispatchAlert(setAlertWarning(alert));
               }
           });
           })
@@ -108,7 +115,7 @@ const Login: React.FC = () => {
                 if (typeof token === 'string' && token.trim() !== '') {
                     validateUserJwt(token).then((data) => {
                         console.log('Validation data:', data.decodedValue);
-                        dispatch(setUserDetails(data.decodedValue)) 
+                        dispatchUser(setUserDetails(data.decodedValue)) 
                     }).catch((validationError) => {
                         console.error('Validation error:', validationError);  
                     });
@@ -117,7 +124,8 @@ const Login: React.FC = () => {
                     console.error('Invalid token:', token); 
                 }
             } else {
-                console.error('No credentials found.');
+              const alert: Alert = { type: 'WARNING', message: 'Password does not match' };
+              dispatchAlert(setAlertWarning(alert));
             }
         });
         })
